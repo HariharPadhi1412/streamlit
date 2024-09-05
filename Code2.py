@@ -9,10 +9,8 @@ from plotly.subplots import make_subplots
 import plotly.graph_objects as go
 
 
-
-
 # Title and Sidebar
-st.title('Stock Dashboard')
+st.title('Stock Dash')
 ticker = st.sidebar.text_input('Enter Ticker')
 Ticker = ticker.upper()
 
@@ -29,8 +27,9 @@ end_date_input = st.sidebar.date_input("End Date", default_end_date)
 if Ticker:
     try:
         # Fetch initial data to determine the earliest available date
-        data = yf.download(Ticker, start=default_start_date, end=default_end_date)
-        
+        data = yf.download(Ticker, start=default_start_date,
+                           end=default_end_date)
+
         if data.empty:
             st.error(f"No data available for {Ticker}")
         else:
@@ -47,9 +46,10 @@ if Ticker:
 
             # Fetch and filter data based on the user-defined date range
             filtered_data = yf.download(Ticker, start=start_date, end=end_date)
-            
+
             if filtered_data.empty:
-                st.error(f"No data available for {Ticker} in the selected date range.")
+                st.error(f"No data available for {
+                         Ticker} in the selected date range.")
             else:
 
                 # Create a subplot with two rows: one for price and one for volume
@@ -63,13 +63,15 @@ if Ticker:
 
                 # Add the stock price trace
                 fig.add_trace(
-                    go.Line(x=filtered_data.index, y=filtered_data['Close'], name='Close Price'),
+                    go.Line(x=filtered_data.index,
+                            y=filtered_data['Close'], name='Close Price'),
                     row=1, col=1
                 )
 
                 # Add the volume trace
                 fig.add_trace(
-                    go.Bar(x=filtered_data.index, y=filtered_data['Volume'], name='Volume'),
+                    go.Bar(x=filtered_data.index,
+                           y=filtered_data['Volume'], name='Volume'),
                     row=2, col=1
                 )
 
@@ -81,38 +83,38 @@ if Ticker:
                     xaxis=dict(
                         rangeselector=dict(
                             buttons=list([
-                                dict(count=1, label="YTD", step="year", stepmode="todate"),
-                                dict(count=1, label="1Y", step="year",stepmode="backward"),
-                                dict(count=3, label="3Y", step="year",stepmode="backward"),
-                                dict(count=5, label="5Y", step="year",stepmode="backward"),
-                                dict(label= "All", step="all")
+                                dict(count=1, label="YTD",
+                                     step="year", stepmode="todate"),
+                                dict(count=1, label="1Y", step="year",
+                                     stepmode="backward"),
+                                dict(count=3, label="3Y", step="year",
+                                     stepmode="backward"),
+                                dict(count=5, label="5Y", step="year",
+                                     stepmode="backward"),
+                                dict(label="All", step="all")
                             ])
                         ),
                         rangeslider=dict(visible=False),
                         type="date"
                     ),
-                    xaxis2= dict(
-                        title ='Date',
+                    xaxis2=dict(
+                        title='Date',
                         rangeslider=dict(
-                                        visible= True,
-                                        thickness= 0.055,
-                                        bgcolor= "lightgray",
-                                        bordercolor = 'gray',
-                                        borderwidth=1
+                            visible=True,
+                            thickness=0.055,
+                            bgcolor="lightgray",
+                            bordercolor='gray',
+                            borderwidth=1
                         )
-                        ),
-                    height=450 ,
-                    showlegend= True# Adjust height if needed1
-                    )
-                
-                
+                    ),
+                    height=450,
+                    showlegend=True  # Adjust height if needed1
+                )
 
                 # Display the plotly chart in Streamlit
                 st.plotly_chart(fig)
     except Exception as e:
         st.error(f"An error occurred: {e}")
-
-
 
 
 # Format the 'Date' column
@@ -123,11 +125,10 @@ data.reset_index(inplace=True)  # Make 'Date' a column
 data['Date'] = pd.to_datetime(data['Date'])
 
 
-data['Formatted_Date'] = data['Date'].dt.strftime('%d/%m/%Y')
+data['Formatted Date'] = data['Date'].dt.strftime('%d/%m/%Y')
 data.reset_index(inplace=True)
 Date = data.columns[1]
 data[Date] = data['Formatted_Date']
-
 
 
 company_overview, pricing_data, fundamental_data, ratio_data = st.tabs(
@@ -407,7 +408,6 @@ company_data = {
 # Display the stock data
 with company_overview:
     st.write(f"{Ticker} Data")
-
 
     for key, value in company_data.items():
         st.write(f"**{key}:** {value}")
